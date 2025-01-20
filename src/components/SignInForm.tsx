@@ -17,20 +17,7 @@ const SignInForm = () => {
     resolver: zodResolver(schema)
   });
 
-  const onSubmit = async (data) => {
-    console.log(data);
-  };
-
   useEffect(() => {
-    if (errors.email) {
-      toast({
-        title: "Email Error",
-        description: errors.email.message,
-        variant: "destructive",
-        duration: 4000,
-      });
-    }
-
     if (errors.password) {
       toast({
         title: "Password Error",
@@ -38,10 +25,19 @@ const SignInForm = () => {
         variant: "destructive",
         duration: 4000,
       });
+      
+      if (errors.email) {
+        toast({
+          title: "Email Error",
+          description: errors.email.message,
+          variant: "destructive",
+          duration: 4000,
+        });
+      }
     }
   }, [errors, toast]);
 
-  const handleFormSubmit = async (data) => {
+  const handleFormSubmit = async (data : SignInSchemaType) => {
     console.log(data);
   };
 
