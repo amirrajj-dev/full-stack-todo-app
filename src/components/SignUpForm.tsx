@@ -10,11 +10,15 @@ import { useForm } from "react-hook-form";
 import { schema, SignUpType } from "@/validations/signup.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/hooks/use-toast";
+import { signUpAction } from "@/actions/auth.action";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
   const {register , handleSubmit , formState : {errors , isSubmitting}} = useForm<SignUpType>({
     resolver : zodResolver(schema)
   })
+
+  const router = useRouter()
 
     useEffect(() => {
 
@@ -47,7 +51,21 @@ const SignUpForm = () => {
     }, [errors]);
 
   const handleformSubmit = async (data : SignUpType)=>{
-    
+    const  res = await signUpAction(data)
+    if (res?.success){
+      toast({
+        title : res.message,
+        className : 'bg-emerald-600'
+    })
+    setTimeout(() => {
+      router.replace('/')
+    }, 3500);
+    }else{
+      toast({
+        title : res?.message,
+        variant : 'destructive'
+    })
+    }
   }
 
   return (
