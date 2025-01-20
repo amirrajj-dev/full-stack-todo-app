@@ -62,6 +62,10 @@ body {
   }
 }
 
+.roboto {
+  font-family: var(--font-roboto)
+}
+
 @layer base {
   * {
     @apply border-border;
