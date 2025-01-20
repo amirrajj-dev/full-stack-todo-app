@@ -1,11 +1,10 @@
-import { ModeToggle } from '@/components/ModeToggle'
 import React from 'react'
 
 const page = () => {
   return (
-    <div className='h-screen dark:bg-indigo-600 bg-red-600'>
-      <ModeToggle/>
-    </div>
+   <div className='min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 roboto'>
+   
+   </div>
   )
 }
 
