@@ -10,12 +10,18 @@ import { SignInSchemaType, schema } from '@/validations/signin.validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/store/auth.store";
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
   const { toast } = useToast();
   const { register, handleSubmit, formState: { errors , isSubmitting }} = useForm<SignInSchemaType>({
     resolver: zodResolver(schema)
   });
+
+  const {login} = useAuth()
+  const router = useRouter()
+
 
   useEffect(() => {
     if (errors.password) {
@@ -38,7 +44,13 @@ const SignInForm = () => {
   }, [errors, toast]);
 
   const handleFormSubmit = async (data : SignInSchemaType) => {
-    console.log(data);
+    const res = await login(data)
+    console.log(res);
+    if (res.success) {
+      setTimeout(() => {
+        router.replace('/')
+      }, 3000);
+    }
   };
 
   return (
