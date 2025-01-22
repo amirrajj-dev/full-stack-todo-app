@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
+import { useAuth } from "@/store/auth.store";
 
 export const signUpAction = async (formData: SignUpType) => {
   if (!formData.email || !formData.password || !formData.name) {
@@ -14,7 +15,17 @@ export const signUpAction = async (formData: SignUpType) => {
       message: "Please fill all the fields",
     };
   }
-
+  
+  const isUserExist = await prisma.user.findUnique({
+    where: { email: formData.email , name : formData.name },
+  })
+  if (isUserExist) {
+    return {
+      success: false,
+      message: "user already exists",
+    }
+  }
+  
   try {
     // Hash password
     const hashedPassword = await bcrypt.hash(formData.password, 10);
@@ -49,8 +60,17 @@ export const signUpAction = async (formData: SignUpType) => {
     const cookiesStore = await cookies();
     cookiesStore.set('todo-app-token', token);
 
+    const setUser = useAuth.getState().setUser
+
     // Revalidate path
     revalidatePath("/");
+
+    setUser({
+      name: user.name,
+      email: user.email,
+      todos : [],
+      isLoggedIn: true,
+    })
 
     return {
       success: true,
@@ -65,3 +85,21 @@ export const signUpAction = async (formData: SignUpType) => {
     };
   }
 };
+
+export const logOutAction = async ()=>{
+  // Clear JWT token from cookies
+  const cookiesStore = await cookies();
+  cookiesStore.set('todo-app-token', '', {
+    httpOnly: true,
+    maxAge: 0,
+    path: '/',
+  })
+  const setUser = useAuth.getState().setUser
+  setUser(null)
+  // Revalidate path
+  revalidatePath("/");
+  return {
+    success: true,
+    message: "You have been logged out successfully",
+  }
+}
