@@ -58,7 +58,13 @@ export const signUpAction = async (formData: SignUpType) => {
 
     // Set JWT token in cookies
     const cookiesStore = await cookies();
-    cookiesStore.set('todo-app-token', token);
+    cookiesStore.set('todo-app-token', token , {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000, // 1 hour
+      path: '/',
+      sameSite: 'strict',
+      secure: true,
+    });
 
     const setUser = useAuth.getState().setUser
 
@@ -74,6 +80,7 @@ export const signUpAction = async (formData: SignUpType) => {
 
     return {
       success: true,
+      user,
       message: "You have been signed up successfully",
     };
 
@@ -101,5 +108,42 @@ export const logOutAction = async ()=>{
   return {
     success: true,
     message: "You have been logged out successfully",
+  }
+}
+
+export const getCurrentUserAction = async ()=>{
+  try {
+    // Check if JWT token is available in cookies
+    const cookiesStore = await cookies();
+    const token = cookiesStore.get('todo-app-token')?.value
+    if (!token) {
+      return {
+        success: false,
+        message: "You are not logged in",
+      };
+    }
+    
+    // Verify JWT token
+
+    if (typeof process.env.SECRET_KEY !== 'string') return
+    const decodedToken = await jwt.verify(token , process.env.SECRET_KEY)
+    const email = decodedToken!.email;
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return {
+        success: false,
+        message: "Failed to retrieve user data",
+      }
+    }
+    return {
+      success: true,
+      user,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "An error occurred while retrieving user data",
+      error
+    }
   }
 }
