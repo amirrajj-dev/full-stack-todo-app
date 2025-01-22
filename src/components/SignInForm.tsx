@@ -44,10 +44,10 @@ const SignInForm = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 roboto px-2">
       <Card className="w-full max-w-sm bg-white dark:bg-gray-800 p-8 shadow-md rounded-lg">
-        <h1 className="flex items-center justify-center gap-2 text-xl mb-10 text-gray-900 dark:text-gray-100">
+        <Link href={'/'} className="flex items-center justify-center gap-2 text-xl mb-10 text-gray-900 dark:text-gray-100">
           <FaCheckDouble className="bg-emerald-600 rounded-md text-white size-7 p-1.5" />
           <span>Todo App</span>
-        </h1>
+        </Link>
         <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">
           Sign In
         </h2>

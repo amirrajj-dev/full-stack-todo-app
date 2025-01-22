@@ -12,11 +12,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/hooks/use-toast";
 import { signUpAction } from "@/actions/auth.action";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/store/auth.store";
 
 const SignUpForm = () => {
   const {register , handleSubmit , formState : {errors , isSubmitting}} = useForm<SignUpType>({
     resolver : zodResolver(schema)
   })
+
+  const {setUser} = useAuth()
 
   const router = useRouter()
 
@@ -52,7 +55,9 @@ const SignUpForm = () => {
 
   const handleformSubmit = async (data : SignUpType)=>{
     const  res = await signUpAction(data)
+    
     if (res?.success){
+      setUser(res.user)
       toast({
         title : res.message,
         className : 'bg-emerald-600'
@@ -71,10 +76,10 @@ const SignUpForm = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 roboto px-2">
       <Card className="w-full max-w-sm bg-white dark:bg-gray-800 p-8 shadow-md rounded-lg">
-        <h1 className="flex items-center justify-center gap-2 text-xl mb-10 text-gray-900 dark:text-gray-100">
+        <Link href={'/'} className="flex items-center justify-center gap-2 text-xl mb-10 text-gray-900 dark:text-gray-100">
           <FaCheckDouble className="bg-emerald-600 rounded-md text-white size-7 p-1.5" />
           <span>Todo App</span>
-        </h1>
+        </Link>
         <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">
           Sign Up
         </h2>
