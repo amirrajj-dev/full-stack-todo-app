@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
 import { useAuth } from "@/store/auth.store";
+import { SignInSchemaType } from "@/validations/signin.validation";
 
 export const signUpAction = async (formData: SignUpType) => {
   if (!formData.email || !formData.password || !formData.name) {
@@ -143,6 +144,54 @@ export const getCurrentUserAction = async ()=>{
     return {
       success: false,
       message: "An error occurred while retrieving user data",
+      error
+    }
+  }
+}
+
+export const signInAction = async (formdata : SignInSchemaType)=>{
+  try {
+    const {email , password} = formdata
+    if (!email ||!password) {
+      return {
+        success: false,
+        message: "Please fill all the fields",
+      }
+    }
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return {
+        success: false,
+        message: "User not found",
+      }
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return {
+        success: false,
+        message: "Incorrect password",
+      }
+    }
+    const token = await jwt.sign({email : user.email} , process.env.SECRET_KEY , {
+      expiresIn: '1h',
+    })
+    const cookiesStore = await cookies();
+    await cookiesStore.set('todo-app-token', token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000, // 1 hour
+      path: '/',
+      sameSite:'strict',
+      secure: true,
+    })
+    return {
+      success: true,
+      message: "You have been logged in successfully",
+      user,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "An error occurred during sign in",
       error
     }
   }
