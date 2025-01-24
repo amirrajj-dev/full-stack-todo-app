@@ -1,4 +1,5 @@
 
+import AddTodo from "@/components/AddTodo";
 import Navbar from "@/components/Navbar";
 import StatusCards from "@/components/StatusCards";
 
@@ -9,6 +10,7 @@ const page = async () => {
       <div className="max-w-5xl mx-auto dark:bg-gray-800 p-4 shadow-md rounded-md">
         <Navbar />
         <StatusCards />
+        <AddTodo/>
       </div>
     </div>
   );
