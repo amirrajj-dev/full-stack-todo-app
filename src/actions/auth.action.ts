@@ -76,7 +76,7 @@ export const signUpAction = async (formData: SignUpType) => {
       name: user.name,
       email: user.email,
       todos : [],
-      isLoggedIn: true,
+      password: user.password
     })
 
     return {
@@ -128,7 +128,7 @@ export const getCurrentUserAction = async ()=>{
 
     if (typeof process.env.SECRET_KEY !== 'string') return
     const decodedToken = await jwt.verify(token , process.env.SECRET_KEY)
-    const email = decodedToken!.email;
+    const email = decodedToken!.email ;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return {
@@ -136,6 +136,7 @@ export const getCurrentUserAction = async ()=>{
         message: "Failed to retrieve user data",
       }
     }
+    user.password = ''
     return {
       success: true,
       user,
@@ -172,13 +173,14 @@ export const signInAction = async (formdata : SignInSchemaType)=>{
         message: "Incorrect password",
       }
     }
+    if (typeof process.env.SECRET_KEY !== 'string') return
     const token = await jwt.sign({email : user.email} , process.env.SECRET_KEY , {
-      expiresIn: '1h',
+      expiresIn: '7d',
     })
     const cookiesStore = await cookies();
     await cookiesStore.set('todo-app-token', token, {
       httpOnly: true,
-      maxAge: 60 * 60 * 1000, // 1 hour
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 hour
       path: '/',
       sameSite:'strict',
       secure: true,
