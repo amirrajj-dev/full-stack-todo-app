@@ -59,3 +59,34 @@ export const createTodoAction = async (todo: Pick<Prisma.TodoCreateInput , 'titl
     };
   }
 };
+
+export const getTodosAction = async ()=>{
+  try {
+    const currentUser = (await getCurrentUserAction())?.user
+    if (!currentUser) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
+    
+    const todos = await prisma.todo.findMany({
+      where: {
+        userId: currentUser.id,
+      },
+      include: {
+        user: true,
+      },
+    })
+    return {
+      success: true,
+      todos,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "An error occurred while fetching todos",
+      error,
+    } 
+  }
+}
