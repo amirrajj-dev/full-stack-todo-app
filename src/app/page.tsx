@@ -2,6 +2,7 @@
 import AddTodo from "@/components/AddTodo";
 import Navbar from "@/components/Navbar";
 import StatusCards from "@/components/StatusCards";
+import TodosContainer from "@/components/TodosContainer";
 
 const page = async () => {
   
@@ -11,6 +12,7 @@ const page = async () => {
         <Navbar />
         <StatusCards />
         <AddTodo/>
+        <TodosContainer/>
       </div>
     </div>
   );
