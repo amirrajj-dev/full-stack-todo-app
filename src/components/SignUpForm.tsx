@@ -11,7 +11,7 @@ import { schema, SignUpType } from "@/validations/signup.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/store/auth.store";
+import { signUpAction } from "@/actions/auth.action";
 
 const SignUpForm = () => {
   const {
@@ -21,8 +21,6 @@ const SignUpForm = () => {
   } = useForm<SignUpType>({
     resolver: zodResolver(schema),
   });
-
-  const { signup } = useAuth();
 
   const router = useRouter();
 
@@ -55,7 +53,7 @@ const SignUpForm = () => {
   }, [errors]);
 
   const handleformSubmit = async (data: SignUpType) => {
-    const res = await signup({
+    const res = await signUpAction({
       email: data.email,
       password: data.password,
       name: data.name,

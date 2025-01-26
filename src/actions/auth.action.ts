@@ -6,7 +6,6 @@ import { revalidatePath } from "next/cache";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
-import { useAuth } from "@/store/auth.store";
 import { SignInSchemaType } from "@/validations/signin.validation";
 
 export const signUpAction = async (formData: SignUpType) => {
@@ -67,17 +66,8 @@ export const signUpAction = async (formData: SignUpType) => {
       secure: true,
     });
 
-    const setUser = useAuth.getState().setUser
-
     // Revalidate path
     revalidatePath("/");
-
-    setUser({
-      name: user.name,
-      email: user.email,
-      todos : [],
-      password: user.password
-    })
 
     return {
       success: true,
@@ -102,8 +92,6 @@ export const logOutAction = async ()=>{
     maxAge: 0,
     path: '/',
   })
-  const setUser = useAuth.getState().setUser
-  setUser(null)
   // Revalidate path
   revalidatePath("/");
   return {

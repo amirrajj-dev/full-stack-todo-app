@@ -99,7 +99,7 @@ const TodosContainer: React.FC = () => {
         <div className="flex items-center justify-center mt-10 text-center">
           <CgSpinner className="text-6xl text-emerald-500 animate-spin" />
         </div>
-      ) : todos.length > 0 ? (
+      ) : todos?.length > 0 ? (
         todos.map((todo) => (
           <Todo
             key={todo.id}
