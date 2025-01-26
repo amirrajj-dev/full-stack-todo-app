@@ -90,3 +90,50 @@ export const getTodosAction = async ()=>{
     } 
   }
 }
+
+export const updateTodoAction = async (todoID : number , newTodo : Partial<Prisma.TodoCreateInput>)=>{
+  try {
+    const currentUser = (await getCurrentUserAction())?.user
+    if (!currentUser) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
+
+    const isTodoExist = await prisma.todo.findFirst({
+      where: { id: todoID, userId: currentUser.id },
+    })
+    if (!isTodoExist) {
+      return {
+        success: false,
+        message: "Todo not found or not authorized to update",
+      }
+    }
+    
+    // Update todo for the current user
+    const updatedTodo = await prisma.todo.update({
+      where: { id: todoID },
+      data: {
+       ...newTodo,
+       completed : newTodo.status === 'COMPLETED' ? true : false 
+      },
+      include: {
+        user: true,
+      },
+    })
+    revalidatePath('/')
+    return {
+      success: true,
+      todo: updatedTodo,
+      message: "Todo updated successfully",
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: "An error occurred while updating the todo",
+      error,
+    }
+  }
+}
