@@ -15,8 +15,8 @@ interface TodoProps {
   };
   onEdit: (
     id: number,
-    updatedTodo: { title: string; priority: string; status: string }
-  ) => void;
+    updatedTodo: { title?: string; priority?: string; status?: string }
+  ) => Promise<void>;
   onDelete: (id: number) => void;
   onPriorityChange: (id: number, priority: string) => void;
   onStatusChange: (id: number, status: string) => void;

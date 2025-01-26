@@ -12,7 +12,7 @@ const AddTodo = () => {
   })
 
   return (
-    <div className='flex items-center justify-between mt-6 p-4 bg-gray-100 dark:bg-gray-800 rounded-md shadow-md'>
+    <div className='flex items-center justify-between mt-6 p-4 bg-gray-100 dark:bg-gray-900 rounded-md shadow-md'>
       <div className="flex flex-col gap-1 dark:text-gray-200">
         <h2 className='text-xl font-bold'>Today's Tasks</h2>
         <span className='text-sm text-gray-600 dark:text-gray-400'>{currentDate}</span>

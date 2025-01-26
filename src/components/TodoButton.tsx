@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "./ui/button";
 
 interface TodoButtonProps {
   onClick: () => void;
@@ -7,12 +8,12 @@ interface TodoButtonProps {
 }
 
 const TodoButton: React.FC<TodoButtonProps> = ({ onClick, children, className }) => (
-  <button
+  <Button
     onClick={onClick}
     className={`text-white border border-gray-700 transition-transform duration-300 transform hover:scale-110 ${className}`}
   >
     {children}
-  </button>
+  </Button>
 );
 
 export default TodoButton;
