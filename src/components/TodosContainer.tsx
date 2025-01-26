@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { FiClipboard } from "react-icons/fi";
 import { CgSpinner } from "react-icons/cg";
 import Todo from "./Todo";
-import { getTodosAction } from "@/actions/todo.action";
+import { getTodosAction, updateTodoAction } from "@/actions/todo.action";
+import { Priority, Prisma, Status } from "@prisma/client";
+import { toast } from "@/hooks/use-toast";
 
 interface TodoType {
   id: number;
@@ -19,36 +21,69 @@ const TodosContainer: React.FC = () => {
   useEffect(() => {
     const getTodos = async () => {
       setLoading(true);
-      const result = await getTodosAction();
-      if (result.success) {
-        setTodos(result.todos);
-      }
+      const todos = (await getTodosAction()).todos;
+        setTodos(todos);
+      
       setLoading(false);
     };
     getTodos();
   }, []);
 
-  const handleEditTodo = (id: number, updatedTodo: { title: string; priority: string; status: string }) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo)));
+  const handleEditTodo = async (id: number, updatedTodo: Partial<Prisma.TodoCreateInput>) => {
+    const res = await updateTodoAction(id , updatedTodo);
+    if (res.success) {
+      toast({
+        title:res.message,
+        className: "bg-emerald-600",
+      })
+      setTodos(todos.map(todo=>todo.id === id ? {...todo , ...updatedTodo} : todo))
+    } else {
+      toast({
+        title: res.message,
+        variant: "destructive",
+      })
+    }
   };
 
   const handleDeleteTodo = (id: number) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const handlePriorityChange = (id: number, priority: string) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, priority } : todo)));
+  const handlePriorityChange = async (id: number, priority: Priority) => {
+    const res = await updateTodoAction(id , {priority});
+    if (res.success) {
+      toast({
+        title:res.message,
+        className: "bg-emerald-600",
+      })
+    }else{
+      toast({
+        title: res.message,
+        variant: "destructive",
+      })
+    }
   };
 
-  const handleStatusChange = (id: number, status: string) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, status } : todo)));
+  const handleStatusChange = async (id: number, status: Status) => {
+    const res = await updateTodoAction(id , {status});
+    if (res.success) {
+      toast({
+        title:res.message,
+        className: "bg-emerald-600",
+      })
+    }else{
+      toast({
+        title: res.message,
+        variant: "destructive",
+      })
+    }
   };
 
   return (
     <div className="todo-list mt-4 mx-auto max-w-screen-lg px-4 sm:px-6 lg:px-8">
       {loading ? (
         <div className="flex items-center justify-center mt-10 text-center">
-          <CgSpinner className="text-6xl text-purple-500 animate-spin" />
+          <CgSpinner className="text-6xl text-emerald-500 animate-spin" />
         </div>
       ) : todos.length > 0 ? (
         todos.map((todo) => (
