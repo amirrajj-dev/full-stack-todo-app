@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FiClipboard } from "react-icons/fi";
 import { CgSpinner } from "react-icons/cg";
 import Todo from "./Todo";
-import { getTodosAction, updateTodoAction } from "@/actions/todo.action";
+import { deleteTodoAction, getTodosAction, updateTodoAction } from "@/actions/todo.action";
 import { Priority, Prisma, Status } from "@prisma/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -23,7 +23,6 @@ const TodosContainer: React.FC = () => {
       setLoading(true);
       const todos = (await getTodosAction()).todos;
         setTodos(todos);
-      
       setLoading(false);
     };
     getTodos();
@@ -45,8 +44,23 @@ const TodosContainer: React.FC = () => {
     }
   };
 
-  const handleDeleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const handleDeleteTodo = async (id: number) => {
+    const isSure = confirm("Are you sure you want to delete this Todo")
+    if (isSure){
+      const res = await deleteTodoAction(id)
+      if (res.success) {
+        toast({
+          title:res.message,
+          className: "bg-emerald-600",
+        })
+        setTodos(todos.filter((todo) => todo.id !== id));
+      }else{
+        toast({
+          title: res.message,
+          variant: "destructive",
+        })
+      }
+    }
   };
 
   const handlePriorityChange = async (id: number, priority: Priority) => {
