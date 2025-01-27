@@ -5,6 +5,7 @@ import { CgSpinner } from 'react-icons/cg';
 import Todo from './Todo';
 import { Priority, Status, Prisma } from '@prisma/client';
 import useTodoStore from '@/store/todo.store';
+import {ScrollArea} from '@/components/ui/scroll-area'
 
 const TodosContainer: React.FC = () => {
   const {
@@ -47,7 +48,8 @@ const TodosContainer: React.FC = () => {
           <CgSpinner className="text-6xl text-emerald-500 animate-spin" />
         </div>
       ) : todos?.length > 0 ? (
-        todos.map((todo) => (
+        <ScrollArea className='h-80'>
+          {todos.map((todo) => (
           <Todo
             key={todo.id}
             todo={todo}
@@ -56,7 +58,8 @@ const TodosContainer: React.FC = () => {
             onPriorityChange={handlePriorityChange}
             onStatusChange={handleStatusChange}
           />
-        ))
+        ))}
+        </ScrollArea>
       ) : (
         <div className="flex flex-col items-center justify-center mt-10 text-center text-gray-500">
           <FiClipboard className="text-6xl mb-4 animate-bounce text-emerald-600" />
