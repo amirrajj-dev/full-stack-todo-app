@@ -11,8 +11,10 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { logOutAction } from "@/actions/auth.action";
 import { toast } from "@/hooks/use-toast";
+import useTodoStore from "@/store/todo.store";
 
 const UserDropDownMenu = ({email} : {email : string}) => {
+  const {setTodos} = useTodoStore()
   const handleLogout = async ()=>{
     const isSure = confirm('Are you sure you want to log out ? ')
     if(isSure){
@@ -22,6 +24,7 @@ const UserDropDownMenu = ({email} : {email : string}) => {
           title: res.message,
           className: 'bg-emerald-600'
         })
+        setTodos([])
       }else{
         toast({
           title: res.message,

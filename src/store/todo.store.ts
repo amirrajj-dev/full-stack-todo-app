@@ -5,6 +5,7 @@ import { toast } from '@/hooks/use-toast';
 
 interface TodoStoreState {
   todos: Todo[];
+  setTodos : (todo : Todo[] | [])=>void;
   loading: boolean;
   fetchTodos: () => Promise<void>;
   createTodo: (title: string, priority: Priority) => Promise<void>;
@@ -17,6 +18,9 @@ interface TodoStoreState {
 const useTodoStore = create<TodoStoreState>(
     (set, get) => ({
       todos: [],
+      setTodos(todo) {
+        set({todos : todo})
+      },
       loading: false,
       fetchTodos: async () => {
         set({ loading: true });

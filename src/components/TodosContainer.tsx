@@ -1,96 +1,43 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { FiClipboard } from "react-icons/fi";
-import { CgSpinner } from "react-icons/cg";
-import Todo from "./Todo";
-import { deleteTodoAction, getTodosAction, updateTodoAction } from "@/actions/todo.action";
-import { Priority, Prisma, Status } from "@prisma/client";
-import { toast } from "@/hooks/use-toast";
-
-interface TodoType {
-  id: number;
-  title: string;
-  priority: string;
-  status: string;
-}
+import React, { useEffect } from 'react';
+import { FiClipboard } from 'react-icons/fi';
+import { CgSpinner } from 'react-icons/cg';
+import Todo from './Todo';
+import { Priority, Status, Prisma } from '@prisma/client';
+import useTodoStore from '@/store/todo.store';
 
 const TodosContainer: React.FC = () => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const {
+    todos,
+    loading,
+    fetchTodos,
+    updateTodo,
+    deleteTodo,
+    setPriority,
+    setStatus,
+  } = useTodoStore();
 
   useEffect(() => {
-    const getTodos = async () => {
-      setLoading(true);
-      const todos = (await getTodosAction()).todos;
-        setTodos(todos);
-      setLoading(false);
-    };
-    getTodos();
-  }, []);
+    fetchTodos();
+  }, [fetchTodos]);
 
   const handleEditTodo = async (id: number, updatedTodo: Partial<Prisma.TodoCreateInput>) => {
-    const res = await updateTodoAction(id , updatedTodo);
-    if (res.success) {
-      toast({
-        title:res.message,
-        className: "bg-emerald-600",
-      })
-      setTodos(todos.map(todo=>todo.id === id ? {...todo , ...updatedTodo} : todo))
-    } else {
-      toast({
-        title: res.message,
-        variant: "destructive",
-      })
-    }
+    await updateTodo(id, updatedTodo);
   };
 
   const handleDeleteTodo = async (id: number) => {
-    const isSure = confirm("Are you sure you want to delete this Todo")
-    if (isSure){
-      const res = await deleteTodoAction(id)
-      if (res.success) {
-        toast({
-          title:res.message,
-          className: "bg-emerald-600",
-        })
-        setTodos(todos.filter((todo) => todo.id !== id));
-      }else{
-        toast({
-          title: res.message,
-          variant: "destructive",
-        })
-      }
+    const isSure = confirm('Are you sure you want to delete this Todo');
+    if (isSure) {
+      await deleteTodo(id);
     }
   };
 
   const handlePriorityChange = async (id: number, priority: Priority) => {
-    const res = await updateTodoAction(id , {priority});
-    if (res.success) {
-      toast({
-        title:res.message,
-        className: "bg-emerald-600",
-      })
-    }else{
-      toast({
-        title: res.message,
-        variant: "destructive",
-      })
-    }
+    await setPriority(id, priority);
   };
 
   const handleStatusChange = async (id: number, status: Status) => {
-    const res = await updateTodoAction(id , {status});
-    if (res.success) {
-      toast({
-        title:res.message,
-        className: "bg-emerald-600",
-      })
-    }else{
-      toast({
-        title: res.message,
-        variant: "destructive",
-      })
-    }
+    await setStatus(id, status);
   };
 
   return (
@@ -114,7 +61,9 @@ const TodosContainer: React.FC = () => {
         <div className="flex flex-col items-center justify-center mt-10 text-center text-gray-500">
           <FiClipboard className="text-6xl mb-4 animate-bounce" />
           <p className="text-2xl font-semibold">No todos yet!</p>
-          <p className="text-lg mt-2">Enjoy a moment of relaxation or start adding new tasks to get organized.</p>
+          <p className="text-lg mt-2">
+            Enjoy a moment of relaxation or start adding new tasks to get organized.
+          </p>
         </div>
       )}
     </div>

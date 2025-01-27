@@ -2,7 +2,7 @@
 import prisma from "../../utils/prisma";
 import { Prisma } from "@prisma/client";
 import { getCurrentUserAction } from "./auth.action";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache"
 
 export const createTodoAction = async (
   todo: Pick<Prisma.TodoCreateInput, "title" | "priority">

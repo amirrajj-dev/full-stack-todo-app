@@ -22,12 +22,13 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { createTodoAction } from "@/actions/todo.action";
 import { Priority } from "@prisma/client";
+import useTodoStore from "@/store/todo.store";
 
 const CreateTodoDialog = () => {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("-1");
+  const {createTodo} = useTodoStore()
 
   const handleCreateTodo = async () => {
     if (!title.trim()){
@@ -44,20 +45,7 @@ const CreateTodoDialog = () => {
       })
       return;
     }
-    const res = await createTodoAction({title , priority : priority as Priority})
-    if (res.success){
-      toast({
-        title: "Todo created successfully",
-        className: "bg-emerald-600",
-      });
-      setTitle("");
-      setPriority("-1");
-    }else{
-      toast({
-        title: res.message,
-        variant: "destructive",
-      });
-    }
+  await createTodo(title , priority as Priority)
   };
 
   return (
