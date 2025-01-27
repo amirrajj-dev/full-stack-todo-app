@@ -5,6 +5,7 @@ import TodoSelect from "./TodoSelect";
 import TodoDropdownMenu from "./TodoDropDownMenu";
 import TodoButton from "./TodoButton";
 import { toast } from "@/hooks/use-toast";
+import { Priority, Prisma, Status } from "@prisma/client";
 
 interface TodoProps {
   todo: {
@@ -15,11 +16,11 @@ interface TodoProps {
   };
   onEdit: (
     id: number,
-    updatedTodo: { title?: string; priority?: string; status?: string }
+    updatedTodo: Partial<Prisma.TodoCreateInput>
   ) => Promise<void>;
   onDelete: (id: number) => void;
-  onPriorityChange: (id: number, priority: string) => void;
-  onStatusChange: (id: number, status: string) => void;
+  onPriorityChange: (id: number, priority: Priority) => void;
+  onStatusChange: (id: number, status: Status) => void;
 }
 
 const Todo: React.FC<TodoProps> = ({
@@ -38,7 +39,7 @@ const Todo: React.FC<TodoProps> = ({
   const handleEdit = () => {
     if (isEditing) {
       setIsEditing(false);
-      onEdit(todo.id, { title, priority, status });
+      onEdit(todo.id, { title, priority : priority as Priority, status : status as Status });
     } else {
       setOriginalTitle(title);
       setIsEditing(true);
@@ -74,7 +75,7 @@ const Todo: React.FC<TodoProps> = ({
           value={priority}
           onValueChange={(value) => {
             setPriority(value);
-            onPriorityChange(todo.id, value);
+            onPriorityChange(todo.id, value as Priority);
           }}
           options={[
             { value: "LOW", label: "Low", color: "bg-green-500" },
@@ -86,7 +87,7 @@ const Todo: React.FC<TodoProps> = ({
           value={status}
           onValueChange={(value) => {
             setStatus(value);
-            onStatusChange(todo.id, value);
+            onStatusChange(todo.id, value as Status);
           }}
           options={[
             { value: "PENDING", label: "Pending", color: "bg-blue-500" },

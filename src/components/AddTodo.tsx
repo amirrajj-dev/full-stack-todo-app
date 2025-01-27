@@ -1,5 +1,4 @@
 import React from "react";
-import { FaPlus } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import CreateTodoDialog from "./CreateTodoDialog";
 import { getCurrentUserAction } from "@/actions/auth.action";
