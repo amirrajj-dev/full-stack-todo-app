@@ -59,12 +59,12 @@ const Todo: React.FC<TodoProps> = ({
   };
 
   return (
-    <div className="todo-item p-6 mb-4 bg-gray-900 shadow-lg rounded-lg flex flex-col md:flex-row items-center justify-between transition-transform duration-300 hover:scale-105 hover:shadow-2xl transform-gpu">
+    <div className="todo-item p-6 mb-4 dark:bg-gray-900 shadow-lg rounded-lg flex flex-col md:flex-row items-center justify-between transition-transform duration-300 hover:scale-105 hover:shadow-2xl transform-gpu">
       <div className="flex items-center w-full md:w-auto mb-4 md:mb-0">
         {isEditing ? (
           <TodoInput value={title} onChange={(e) => setTitle(e.target.value)} />
         ) : (
-          <h3 className="text-lg font-extrabold text-white transition-all duration-300">
+          <h3 className="text-lg font-extrabold dark:text-white transition-all duration-300">
             {todo.title}
           </h3>
         )}

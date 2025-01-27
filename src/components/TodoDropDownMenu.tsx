@@ -20,16 +20,16 @@ const TodoDropdownMenu: React.FC<TodoDropdownMenuProps> = ({ onEdit, onCopy, onD
     <DropdownMenuTrigger className="text-white bg-purple-600 p-2 rounded-md hover:bg-purple-700 border border-gray-700 transition-transform duration-300 transform hover:scale-110">
       <FiEdit />
     </DropdownMenuTrigger>
-    <DropdownMenuContent className="bg-gray-800">
-      <DropdownMenuLabel className="text-gray-300">Actions</DropdownMenuLabel>
-      <DropdownMenuSeparator className="border-gray-700" />
-      <DropdownMenuItem onSelect={onEdit} className="text-gray-300 hover:bg-gray-700">
+    <DropdownMenuContent className="dark:bg-gray-800 shadow-lg">
+      <DropdownMenuLabel className="dark:text-gray-300 font-semibold">Actions</DropdownMenuLabel>
+      <DropdownMenuSeparator className="border-gray-700 my-1" />
+      <DropdownMenuItem onSelect={onEdit} className="flex items-center dark:text-gray-300 hover:bg-gray-700 cursor-pointer p-2 rounded-md">
         <FiEdit className="mr-2" /> Edit
       </DropdownMenuItem>
-      <DropdownMenuItem onSelect={onCopy} className="text-gray-300 hover:bg-gray-700">
+      <DropdownMenuItem onSelect={onCopy} className="flex items-center dark:text-gray-300 hover:bg-gray-700 cursor-pointer p-2 rounded-md">
         <FiCopy className="mr-2" /> Copy
       </DropdownMenuItem>
-      <DropdownMenuItem onSelect={onDelete} className="text-gray-300 hover:bg-gray-700">
+      <DropdownMenuItem onSelect={onDelete} className="flex items-center dark:text-gray-300 hover:bg-gray-700 cursor-pointer p-2 rounded-md">
         <FiTrash className="mr-2" /> Delete
       </DropdownMenuItem>
     </DropdownMenuContent>

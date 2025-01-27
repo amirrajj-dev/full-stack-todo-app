@@ -10,7 +10,7 @@ const TodoInput: React.FC<TodoInputProps> = ({ value, onChange }) => (
     type="text"
     value={value}
     onChange={onChange}
-    className="input bg-gray-800 text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 w-full md:w-auto"
+    className="input dark:bg-gray-800 dark:text-white p-2 rounded-md focus:outline-none ring-2 ring-emerald-500 w-full md:w-auto"
   />
 );
 

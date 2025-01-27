@@ -24,11 +24,12 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Priority } from "@prisma/client";
 import useTodoStore from "@/store/todo.store";
+import { CgSpinner } from "react-icons/cg";
 
 const CreateTodoDialog = () => {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("-1");
-  const {createTodo} = useTodoStore()
+  const {createTodo , loading} = useTodoStore()
 
   const handleCreateTodo = async () => {
     if (!title.trim()){
@@ -46,6 +47,8 @@ const CreateTodoDialog = () => {
       return;
     }
   await createTodo(title , priority as Priority)
+  setTitle('')
+  setPriority('-1')
   };
 
   return (
@@ -111,7 +114,13 @@ const CreateTodoDialog = () => {
               onClick={handleCreateTodo}
               className="rounded-md p-2 text-white bg-emerald-700 hover:bg-emerald-800 transition-colors"
             >
-              Create
+              {loading ? (
+                <span>
+                  <CgSpinner className="animate-spin h-5 w-5" />
+                </span>
+              ) : (
+                <span>Create</span>
+              )}
             </Button>
             <DialogClose asChild>
               <Button variant="secondary" className="ml-2 rounded-md p-2">

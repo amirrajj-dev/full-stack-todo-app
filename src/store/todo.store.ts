@@ -39,6 +39,7 @@ const useTodoStore = create<TodoStoreState>(
         set({ loading: false });
       },
       createTodo: async (title: string, priority: Priority) => {
+        set({ loading: true });
         const res = await createTodoAction({ title, priority });
         if (res.success) {
           toast({
@@ -46,11 +47,13 @@ const useTodoStore = create<TodoStoreState>(
             className: 'bg-emerald-600',
           });
           get().fetchTodos();
+          set({loading: false});
         } else {
           toast({
             title: res.message,
             variant: 'destructive',
           });
+          set({loading: false});
         }
       },
       updateTodo: async (id: number, updatedTodo: Partial<Prisma.TodoCreateInput>) => {

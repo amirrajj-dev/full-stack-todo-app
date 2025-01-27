@@ -59,7 +59,7 @@ const TodosContainer: React.FC = () => {
         ))
       ) : (
         <div className="flex flex-col items-center justify-center mt-10 text-center text-gray-500">
-          <FiClipboard className="text-6xl mb-4 animate-bounce" />
+          <FiClipboard className="text-6xl mb-4 animate-bounce text-emerald-600" />
           <p className="text-2xl font-semibold">No todos yet!</p>
           <p className="text-lg mt-2">
             Enjoy a moment of relaxation or start adding new tasks to get organized.
