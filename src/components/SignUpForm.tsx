@@ -60,9 +60,18 @@ const SignUpForm = () => {
     });
 
     if (res.success) {
+      toast({
+        title: res.message,
+        className: "bg-emerald-600",
+      })
       setTimeout(() => {
         router.replace("/");
       }, 3500);
+    }else{
+      toast({
+        title: res.message,
+        variant: "destructive",
+      })
     }
   };
 

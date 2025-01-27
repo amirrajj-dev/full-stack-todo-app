@@ -10,7 +10,7 @@ interface StatusCardProps {
 
 const StatusCard = ({ title, count, icon, color }: StatusCardProps) => {
     return (
-        <Card className="bg-white dark:bg-gray-900 shadow-md rounded-md">
+        <Card className="bg-white dark:bg-gray-900 shadow-md rounded-md transition-all duration-300 hover:scale-105">
             <CardHeader className="flex items-center">
                 <div className={`text-2xl mr-2 ${color}`}>{icon}</div>
                 <CardTitle>{title}</CardTitle>

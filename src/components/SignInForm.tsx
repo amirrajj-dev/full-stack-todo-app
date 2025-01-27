@@ -49,9 +49,18 @@ const SignInForm = () => {
     const res = await signInAction(data);
     console.log(res);
     if (res?.success) {
+      toast({
+        title: res.message,
+        className: "bg-emerald-600",
+      });
       setTimeout(() => {
         router.replace("/");
       }, 3000);
+    }else{
+      toast({
+        title: res?.message,
+        variant: "destructive",
+      });
     }
   };
 
