@@ -24,6 +24,8 @@
 
 Welcome to the Full Stack Todo List App! This is a modern web application designed to help you manage your todos efficiently with support for user authentication, prioritization, and status tracking. The app features both light and dark modes and a responsive design for seamless use on all devices.
 
+**Check out the live application [here](https://full-stack-todo-app-beta.vercel.app/).**
+
 ## Features
 
 - ✅ **User Authentication**: Sign up, Sign in, and Log out.
